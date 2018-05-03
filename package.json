@@ -1,0 +1,22 @@
+{
+  "name": "open-badge-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kayaelle/Open-Badge-Bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kayaelle/Open-Badge-Bot/issues"
+  },
+  "homepage": "https://github.com/kayaelle/Open-Badge-Bot#readme",
+  "dependencies": {
+    "twit": "^2.2.9"
+  }
+}

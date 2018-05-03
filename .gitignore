@@ -57,3 +57,6 @@ typings/
 # dotenv environment variables file
 .env
 
+# config file for twit - will change this later
+config.js
+
