@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/kayaelle/Open-Badge-Bot#readme",
   "dependencies": {
+    "express": "^4.16.3",
+    "find-hashtags": "^1.0.1",
     "twit": "^2.2.9"
   }
 }
