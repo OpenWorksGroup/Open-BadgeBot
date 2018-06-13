@@ -19,6 +19,8 @@ var config = require('./config');
 var badge = require('./badge-participate-community.js');  // stubbing out the manifest. 
 /*Thinking of a system that looks for badges so we can have multiple badges that are active and inactive*/
 
+//DEBUG TO VIEW BADGE DATA
+
 console.log('BADGE:');
 
 Object.keys(badge).forEach(function(key) {
@@ -28,6 +30,17 @@ Object.keys(badge).forEach(function(key) {
         criteria.forEach(function(prop) {
             console.log('=====================');
             console.log('Criteria '+ i++ + ':');
+            Object.keys(prop).forEach(function(key) {
+                console.log(key + ' '+ prop[key]);
+            });
+        });
+    }
+    if (key === "faqs") {
+        var faqs = badge[key];
+        i = 1;
+        faqs.forEach(function(prop) {
+            console.log('=====================');
+            console.log('FAQ '+ i++ + ':');
             Object.keys(prop).forEach(function(key) {
                 console.log(key + ' '+ prop[key]);
             });

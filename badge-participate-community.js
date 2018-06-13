@@ -43,5 +43,16 @@ module.exports = {
             svg: ""
         }
         
+    ],
+    faqs: [
+        {
+            question: "When will this badge be available?",
+            answer: "During Badge Summit & ISTE 2018"
+        },
+        {
+            question: "Another questionestion?",
+            answer: "Another Answer!"
+        },
+
     ]
 }
