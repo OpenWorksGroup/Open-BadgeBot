@@ -1,7 +1,29 @@
 const express = require('express');
 const app = express();
 
+const path = require('path');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+
+//set up our express application
+app.use(morgan('dev')); // log every request to the console
+app.use(express.static(path.join(__dirname, 'public')));
+
+//app.set('views', path.join(__dirname, 'app/views'));
+app.set('views', [path.join(__dirname, 'app/views'), path.join(__dirname, 'app/views/_shared/')]);
+app.set('view engine', 'ejs');
+
+//require('./config/routes.js')(app);
+
 app.listen(3000, () => console.log('Example app listening on port 3000!'));
+
+app.get('/', function(req, res) {
+    res.render('index', {title: 'Open BadgeBot'});
+})
 
 //http://theusualstuff.com/create-twitter-bot-node-js-twit-package/
 //https://codeburst.io/build-a-simple-twitter-bot-with-node-js-in-just-38-lines-of-code-ed92db9eb078
@@ -15,7 +37,7 @@ var Twit = require('twit');
 var findHashtags = require('find-hashtags');
  
 //call the API keys we saved in the config.js file
-var config = require('./config');  
+var twitConfig = require('./config/twit');  
 var badge = require('./badge-participate-community.js');  // stubbing out the manifest. 
 /*Thinking of a system that looks for badges so we can have multiple badges that are active and inactive*/
 
@@ -54,7 +76,7 @@ Object.keys(badge).forEach(function(key) {
 //console.log('hashtag_id: '+ badge.hashtag_id);
  
 //configure the twit package with our API keys
-var T = new Twit(config); 
+var T = new Twit(twitConfig); 
 
 T.get('/statuses/mentions_timeline', { count: 800 }, function(err, data, response) {
     //console.log(data);

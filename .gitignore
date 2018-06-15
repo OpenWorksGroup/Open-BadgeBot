@@ -58,5 +58,5 @@ typings/
 .env
 
 # config file for twit - will change this later
-config.js
+config/twit.js
 
