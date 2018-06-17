@@ -4,6 +4,7 @@ const app = express();
 const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const { convertFile } = require('convert-svg-to-png');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -42,7 +43,6 @@ var badge = require('./badge-participate-community.js');  // stubbing out the ma
 /*Thinking of a system that looks for badges so we can have multiple badges that are active and inactive*/
 
 //DEBUG TO VIEW BADGE DATA
-
 console.log('BADGE:');
 
 Object.keys(badge).forEach(function(key) {
@@ -95,7 +95,27 @@ T.get('/statuses/mentions_timeline', { count: 800 }, function(err, data, respons
     }
 });
 
+// I am making this into its own function so we can apply this to any new
+// badges that come from newly added badge images.
+localConvertFile("test.svg", "anothername.png")
 
+// this will convert any files from svg -> png
+async function localConvertFile(inputFilePath, outputFilePath) {
+  let options = {};
+  if (outputFilePath) {
+    options = { ...options, outputFilePath };
+  }
 
+  // PLUGIN from: https://www.npmjs.com/package/convert-svg-to-png
+  return await convertFile(inputFilePath, options).then((outputPath) => {
+    const successString = "You can find the recently created png at " + outputPath;
+    console.log(successString);
+    return successString;
+  }, (error) => {
+    const errorString = "ERROR:" + error;
+    console.log(errorString)
+    return errorString;
+  });
+}
 
 //app.get('/', (req, res) => res.send('Hello World!'));
