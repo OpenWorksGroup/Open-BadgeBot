@@ -84,7 +84,9 @@ T.get('/statuses/mentions_timeline', { count: 800 }, function(err, data, respons
         data.forEach(function(mention) {
             console.log(mention.user.screen_name);
             console.log(mention.text);
-            console.log(findHashtags('This #badgename contains a number of #useful hashtags'));
+            console.log('tweet url: https://twitter.com/'+mention.user.screen_name+'/status/'+mention.id_str);
+            console.log(findHashtags(mention.text));
+            //console.log(JSON.stringify(mention));
            // reply = '@' + mention.user.screen_name + ' thanks for reaching out!'
            // T.post('statuses/update', { status: reply, in_reply_to_status_id: mention.id_str }, function(err, data, response) {              
             //    console.log(data)
