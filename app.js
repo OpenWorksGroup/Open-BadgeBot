@@ -5,6 +5,7 @@ const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const { convertFile } = require('convert-svg-to-png');
+const fs = require('fs');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -86,9 +87,7 @@ T.get('/statuses/mentions_timeline', { count: 800 }, function(err, data, respons
         data.forEach(function(mention) {
             console.log(mention.user.screen_name);
             console.log(mention.text);
-            console.log('tweet url: https://twitter.com/'+mention.user.screen_name+'/status/'+mention.id_str);
-            console.log(findHashtags(mention.text));
-            //console.log(JSON.stringify(mention));
+            console.log(findHashtags('This #badgename contains a number of #useful hashtags'));
            // reply = '@' + mention.user.screen_name + ' thanks for reaching out!'
            // T.post('statuses/update', { status: reply, in_reply_to_status_id: mention.id_str }, function(err, data, response) {              
             //    console.log(data)
@@ -118,6 +117,36 @@ async function localConvertFile(inputFilePath, outputFilePath) {
     console.log(errorString)
     return errorString;
   });
+}
+
+/*
+Post a tweet with media
+
+pngFileName: this must be the png file
+status: This is going to be the text associated with the png
+altText: this will be applied as the alt tag on the image
+*/
+function postBadgeWithMedia(pngFileName, status, altText = "") {
+  var b64content = fs.readFileSync(fileName, { encoding: 'base64' })
+
+  // // first we must post the media to Twitter
+  T.post('media/upload', { media_data: b64content }, function (err, data, response) {
+    // now we can assign alt text to the media, for use by screen readers and
+    // other text-based presentations and interpreters
+    var mediaIdStr = data.media_id_string
+    var meta_params = { media_id: mediaIdStr, alt_text: { text: altText } }
+
+    T.post('media/metadata/create', meta_params, function (err, data, response) {
+      if (!err) {
+        // now we can reference the media and post a tweet (media will attach to the tweet)
+        var params = { status: status, media_ids: [mediaIdStr] }
+
+        T.post('statuses/update', params, function (err, data, response) {
+          console.log(data)
+        })
+      }
+    })
+  })
 }
 
 //app.get('/', (req, res) => res.send('Hello World!'));
