@@ -2,7 +2,7 @@
 
 `>npm install`
 
-`>node app.js`
+`>npm run-script badgebot
 
 Requirement:
 
