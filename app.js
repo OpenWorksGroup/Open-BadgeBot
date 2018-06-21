@@ -18,6 +18,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', [path.join(__dirname, 'app/views'), path.join(__dirname, 'app/views/_shared/')]);
 app.set('view engine', 'ejs');
 
+app.set('badges',[path.join(__dirname, 'app/badges')]);
+
 //require('./config/routes.js')(app);
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'));
@@ -39,7 +41,7 @@ var findHashtags = require('find-hashtags');
  
 //call the API keys we saved in the config.js file
 var twitConfig = require('./config/twit');  
-var badge = require('./badge-participate-community.js');  // stubbing out the manifest. 
+var badge = require('testbadge.js');  // stubbing out the manifest. 
 /*Thinking of a system that looks for badges so we can have multiple badges that are active and inactive*/
 
 //DEBUG TO VIEW BADGE DATA
