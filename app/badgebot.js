@@ -1,6 +1,7 @@
 var Twit = require('twit');  
 var findHashtags = require('find-hashtags');
 const { convertFile } = require('convert-svg-to-png');
+var _ = require('underscore');
 const fs = require('fs');
 const path = require('path');
 
@@ -20,21 +21,21 @@ var badgesFolder = '../app/badges';
 fs.readdir(path.join(__dirname,badgesFolder), (err, files) => {
   files.forEach(file => {
     
-    console.log("HEY "+file);
+    //console.log("HEY "+file);
     var badge = require('../app/badges/'+file); 
 
     //DEBUG TO VIEW BADGE DATA
-console.log('BADGE:');
+    console.log('BADGE:');
 
 Object.keys(badge).forEach(function(key) {
     if (key === "criteria") {
         var criteria = badge[key];
         i = 1;
         criteria.forEach(function(prop) {
-            console.log('=====================');
-            console.log('Criteria '+ i++ + ':');
+           // console.log('=====================');
+           // console.log('Criteria '+ i++ + ':');
             Object.keys(prop).forEach(function(key) {
-                console.log(key + ' '+ prop[key]);
+               // console.log(key + ' '+ prop[key]);
             });
         });
     }
@@ -42,15 +43,15 @@ Object.keys(badge).forEach(function(key) {
         var faqs = badge[key];
         i = 1;
         faqs.forEach(function(prop) {
-            console.log('=====================');
-            console.log('FAQ '+ i++ + ':');
+           // console.log('=====================');
+           // console.log('FAQ '+ i++ + ':');
             Object.keys(prop).forEach(function(key) {
-                console.log(key + ' '+ prop[key]);
+               // console.log(key + ' '+ prop[key]);
             });
         });
     }
     else {
-        console.log(key + ' '+ badge[key]);
+       // console.log(key + ' '+ badge[key]);
     }
 });
 //console.log('Badge Name: '+ badge.badge_name);
@@ -62,14 +63,25 @@ Object.keys(badge).forEach(function(key) {
  
 //configure the twit package with our API keys
 var T = new Twit(twitConfig); 
+var badgehashtags = ["#testbadge", "#testbadge2"];
 
 T.get('/statuses/mentions_timeline', { count: 800 }, function(err, data, response) {
     //console.log(data);
     if (data) {
-        data.forEach(function(mention) {
+        _.each(data,function(mention) {
             console.log(mention.user.screen_name);
             console.log(mention.text);
-            console.log(findHashtags('This #badgename contains a number of #useful hashtags'));
+            var hashtagsFound = findHashtags('This #badgename contains a number of #useful hashtags');
+            console.log('tweet url: https://twitter.com/'+mention.user.screen_name+'/status/'+mention.id_str);
+            var hashtagsFound = findHashtags(mention.text);
+            console.log(hashtagsFound);
+
+            _.each(hashtagsFound,function(hashtag) {            
+              console.log(_.contains(["testbadge", "testbadge2"], 'testbadge'));
+              //console.log(hashtag);
+            });
+
+            
            // reply = '@' + mention.user.screen_name + ' thanks for reaching out!'
            // T.post('statuses/update', { status: reply, in_reply_to_status_id: mention.id_str }, function(err, data, response) {              
             //    console.log(data)
