@@ -21,7 +21,7 @@ module.exports = {
             description: "Share a link to your favorite tool or resource that you’ve learned about at this event",
             evidence_required: "valid url",
             logic_function: "tweet_url", // just testing that is a url for now
-            not_met_message: "I can't get to that resource. Try again!",
+            not_met_message: "That resource is not readable by this machine. Try again!",
             success_message: "Thanks for sharing!",
             svg: ""
         },
@@ -39,8 +39,8 @@ module.exports = {
             description: "Tweet something you heard or read at this event that changed your thinking. If you know it, include the twitter account of who said it.",
             evidence_required: "text", //need to test what this arrives as via twitter
             logic_function: "tweet_text", // 
-            not_met_message: "What'd you hear? Try again!",
-            success_message: "Rad. Thanks for sharing!",
+            not_met_message: "What was that? Try again please.",
+            success_message: "Verrry interesting!",
             svg: ""
         }
         
