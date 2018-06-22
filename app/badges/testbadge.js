@@ -9,6 +9,7 @@ module.exports = {
     criteria:[
         {
             hashtag_id: "photo",
+            badge_color: "#E27D60",
             description: "Post a photo with someone you follow on social media who you met at this event.",
             evidence_required: "describe image types allowed through twitter",
             logic_function: "twitter_photos", // just testing that the url is an image type
@@ -18,6 +19,7 @@ module.exports = {
         },
         {
             hashtag_id:"resource",
+            badge_color: "#85DCB0",
             description: "Share a link to your favorite tool or resource that you’ve learned about at this event",
             evidence_required: "valid url",
             logic_function: "tweet_url", // just testing that is a url for now
@@ -27,6 +29,7 @@ module.exports = {
         },
         {
             hashtag_id:"learned",
+            badge_color: "#E8A87C",
             description: "Choose a gif that encapsulates something you've learned at this event.",
             evidence_required: "gif or other imagetype?", //need to test what this arrives as via twitter
             logic_function: "tweet_gif",
@@ -36,6 +39,7 @@ module.exports = {
         },
         {
             hashtag_id:"oh",
+            badge_color: "#C38D9E",
             description: "Tweet something you heard or read at this event that changed your thinking. If you know it, include the twitter account of who said it.",
             evidence_required: "text", //need to test what this arrives as via twitter
             logic_function: "tweet_text", // 
