@@ -69,7 +69,7 @@ function fisherYatesShuffle(array) {
 
 /* uncomment the line below to see how the localConvert works */
 async function localConvert(input, outputFilePath) {
-  let options = { width: 472, height: 392 };
+  let options = { width: badgeWidth, height: badgeHeight };
   if (outputFilePath) {
     // options = { ...options, filename: outputFilePath };
   }
