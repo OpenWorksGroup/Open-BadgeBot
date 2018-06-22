@@ -1,144 +1,198 @@
-var Twit = require('twit');  
-var findHashtags = require('find-hashtags');
+const Twit = require('twit'); 
+var Gists = require('gists');
+const findHashtags = require('find-hashtags');
 const { convertFile } = require('convert-svg-to-png');
-var _ = require('underscore');
+const _ = require('underscore');
+const async = require("async");
 const fs = require('fs');
 const path = require('path');
 
-//http://theusualstuff.com/create-twitter-bot-node-js-twit-package/
-//https://codeburst.io/build-a-simple-twitter-bot-with-node-js-in-just-38-lines-of-code-ed92db9eb078
-//https://developer.twitter.com/en/docs/api-reference-index
-//https://developer.twitter.com/en/docs/basics/rate-limiting.html
-//https://developer.twitter.com/en/docs/developer-utilities/twitter-text --someday?
-//https://apps.twitter.com/app/15182189/show
+const twitConfig = require('../config/twit');
+const T = new Twit(twitConfig); 
+const ghConfig = require('../config/github');
+const gists = new Gists(ghConfig);
 
-//use the Twit package
- 
-//call the API keys we saved in the config.js file
-var twitConfig = require('../config/twit');  
-var badgesFolder = '../app/badges';
+const isImageUrl = require('is-image-url');
+const isUrl = require('is-url');
 
-fs.readdir(path.join(__dirname,badgesFolder), (err, files) => {
-  files.forEach(file => {
-    
-    //console.log("HEY "+file);
-    var badge = require('../app/badges/'+file); 
+const badgesFolder = '../app/badges';
+var badges = [];
+var bbGists = [];
 
-    //DEBUG TO VIEW BADGE DATA
-    console.log('BADGE:');
-
-Object.keys(badge).forEach(function(key) {
-    if (key === "criteria") {
-        var criteria = badge[key];
-        i = 1;
-        criteria.forEach(function(prop) {
-           // console.log('=====================');
-           // console.log('Criteria '+ i++ + ':');
-            Object.keys(prop).forEach(function(key) {
-               // console.log(key + ' '+ prop[key]);
-            });
-        });
+// Can use this to check to see if gist exist based on supplied filename
+function checkGists(fileName, callback) {
+  _.each(bbGists,function(bbGist) { 
+    bbGistsFile = Object.keys(bbGist.files);
+    //console.log('bbGistsFile '+bbGistsFile);
+    //console.log('re '+badgeHashtag+'-'+screename+'-'+criteria+'.json');
+    //console.log("fileName: "+fileName);
+    if (bbGistsFile == fileName){
+     // console.log("MATCH");
+      callback(true);
     }
-    if (key === "faqs") {
-        var faqs = badge[key];
-        i = 1;
-        faqs.forEach(function(prop) {
-           // console.log('=====================');
-           // console.log('FAQ '+ i++ + ':');
-            Object.keys(prop).forEach(function(key) {
-               // console.log(key + ' '+ prop[key]);
-            });
-        });
+  });
+};
+
+// logicFunctions for tweets
+function twitter_functions(tweet, logicFunction, callback) {
+  var resultArr = [];
+  var resultBool = false;
+  if (logicFunction == "twitter_photos") {
+    //console.log(JSON.stringify(tweet));
+    _.each(tweet.entities.media,function(media) { 
+      console.log("TWEET MEDIA URL: "+JSON.stringify(media.media_url));
+      if (isImageUrl(media.media_url)) {
+        resultBool = true;
+      }
+      resultArr.push({url:media.media_url,result:resultBool});
+      callback(resultArr)
+    }); 
+  }
+  else if (logicFunction == "tweet_url") {
+
+   // console.log("TWEET URLs: "+tweet.entities.urls);
+    if (typeof tweet.entities.urls !== 'undefined') {
+      //console.log("hey wha?"); // this isn't working - come back & test for not passing
+      _.each(tweet.entities.urls,function(tweet) { 
+        console.log("TWEET URL: "+tweet.url);
+        if (isUrl(tweet.url)) {
+          resultBool = true;
+        }
+        resultArr.push({url:tweet.url,result:resultBool});
+        callback(resultArr);
+      }); 
     }
     else {
-       // console.log(key + ' '+ badge[key]);
+      console.log("NO URLS");
+      resultArr.push({error:"Missing URL"});
+      callback(resultArr);
     }
-});
-//console.log('Badge Name: '+ badge.badge_name);
-//console.log('hashtag_id: '+ badge.hashtag_id);
-
-  });
-})
-
- 
-//configure the twit package with our API keys
-var T = new Twit(twitConfig); 
-var badgehashtags = ["#testbadge", "#testbadge2"];
-
-T.get('/statuses/mentions_timeline', { count: 800 }, function(err, data, response) {
-    //console.log(data);
-    if (data) {
-        _.each(data,function(mention) {
-            console.log(mention.user.screen_name);
-            console.log(mention.text);
-            var hashtagsFound = findHashtags('This #badgename contains a number of #useful hashtags');
-            console.log('tweet url: https://twitter.com/'+mention.user.screen_name+'/status/'+mention.id_str);
-            var hashtagsFound = findHashtags(mention.text);
-            console.log(hashtagsFound);
-
-            _.each(hashtagsFound,function(hashtag) {            
-              console.log(_.contains(["testbadge", "testbadge2"], 'testbadge'));
-              //console.log(hashtag);
-            });
-
-            
-           // reply = '@' + mention.user.screen_name + ' thanks for reaching out!'
-           // T.post('statuses/update', { status: reply, in_reply_to_status_id: mention.id_str }, function(err, data, response) {              
-            //    console.log(data)
-           // });
-        });
-    }
-});
-
-// I am making this into its own function so we can apply this to any new
-// badges that come from newly added badge images.
-localConvertFile("test.svg", "anothername.png")
-
-// this will convert any files from svg -> png
-async function localConvertFile(inputFilePath, outputFilePath) {
-  let options = {};
-  if (outputFilePath) {
-    options = { ...options, outputFilePath };
   }
 
-  // PLUGIN from: https://www.npmjs.com/package/convert-svg-to-png
-  return await convertFile(inputFilePath, options).then((outputPath) => {
-    const successString = "You can find the recently created png at " + outputPath;
-    console.log(successString);
-    return successString;
-  }, (error) => {
-    const errorString = "ERROR:" + error;
-    console.log(errorString)
-    return errorString;
+  else if (logicFunction == "tweet_gif") {
+    //console.log(JSON.stringify(tweet));
+   // console.log("TWEET VIDEO INFO: "+JSON.stringify(tweet.extended_entities.media));
+    _.each(tweet.extended_entities.media,function(media) { 
+     // console.log("TWEET MEDIA URL: "+JSON.stringify(media.video_info.variants[0].url)); //twitter may do more than one variant at some point and this maybreak
+        resultBool = true; //setting to true because twitter insrets this - revisit
+        resultArr.push({url:media.video_info.variants[0].url,result:resultBool});
+      callback(resultArr);
+    });
+  }
+  else if (logicFunction == "tweet_text") {
+    //console.log(JSON.stringify(tweet));
+    console.log("TWEET TEXT: "+JSON.stringify(tweet.mention));
+    /*_.each(tweet.extended_entities.media,function(media) { 
+     // console.log("TWEET MEDIA URL: "+JSON.stringify(media.video_info.variants[0].url)); //twitter may do more than one variant at some point and this maybreak
+        resultBool = true; //setting to true because twitter insrets this - revisit
+        resultArr.push({url:media.video_info.variants[0].url,result:resultBool});
+      callback(resultArr);
+    });*/
+  }
+
+}
+
+
+async.waterfall([
+  getGists,
+  getBadges,
+  processTweets
+  ], function (err, result) {
+      console.log("END");
+  });
+
+
+function getGists(callback) {
+  gists.all(function(err,res){
+    if (res) {
+      bbGists = res;
+      callback(null); 
+    }
   });
 }
 
-/*
-Post a tweet with media
+function getBadges(callback) {
+  var files = fs.readdirSync(path.join(__dirname,badgesFolder));
+  //console.log("FILES "+files);
+  async.each(files, function(file, callback) {
+    var badge = require('../app/badges/'+file);
+    badges.push(badge);
+    callback(null,badges);
+  }, function (err, result) {
+   // console.log('badges '+ JSON.stringify(badges));
+  });
+  callback(null,badges); 
+}
 
-pngFileName: this must be the png file
-status: This is going to be the text associated with the png
-altText: this will be applied as the alt tag on the image
-*/
-function postBadgeWithMedia(pngFileName, status, altText = "") {
-  var b64content = fs.readFileSync(fileName, { encoding: 'base64' })
+function processTweets(badges, callback) { 
+  T.get('/statuses/mentions_timeline', { count: 800 }, function(err, tweets, response) {
+    if (tweets) {
+      async.each(tweets, function(tweet, callback) {
+        async.waterfall([
+          //step 1: get badge
+          function(callback) {
+            hashtagsFound = findHashtags(tweet.text);
+            console.log("hashtagsFound "+hashtagsFound);
+  
+            async.each(hashtagsFound, function(hashtag, callback) {
+              //console.log("hashtag "+hashtag);
+              var badge = _.find(badges, function (obj) { return obj.hashtag_id === hashtag; });
+              if (badge) {
+                delete hashtagsFound[hashtag];
+                callback(badge);
+              }
+            }, function (badge) {
+            //  console.log("Found Badge "+ JSON.stringify(badge));
+              callback(null, tweet, badge);
+          });
+        },
+        // step 2: get criteria
+        function(tweet,badge, callback) {
+          async.each(hashtagsFound, function(hashtag, callback) {
+           // console.log("hashtag criteria"+hashtag);
+            var criteria = _.find(badge.criteria, function (obj) { return obj.hashtag_id === hashtag; });
+            if (criteria) {
+              callback(criteria);
+            }
+          }, function (criteria) {
+          //  console.log("Found Criteria "+ JSON.stringify(criteria));
+            callback(null, criteria, tweet, badge);
+          });
+        },
+        // step 3: check logic & if it's been done already
+        function(criteria,tweet,badge,callback) {
 
-  // // first we must post the media to Twitter
-  T.post('media/upload', { media_data: b64content }, function (err, data, response) {
-    // now we can assign alt text to the media, for use by screen readers and
-    // other text-based presentations and interpreters
-    var mediaIdStr = data.media_id_string
-    var meta_params = { media_id: mediaIdStr, alt_text: { text: altText } }
+          var badgeHashtag = badge.hashtag_id;
+          var screename = tweet.user.screen_name;
+          var criteriaHashTag = criteria.hashtag_id;
+          var logicFunction = criteria.logic_function;
 
-    T.post('media/metadata/create', meta_params, function (err, data, response) {
-      if (!err) {
-        // now we can reference the media and post a tweet (media will attach to the tweet)
-        var params = { status: status, media_ids: [mediaIdStr] }
+          //console.log("criteria "+ JSON.stringify(criteria));
+          console.log("logicFunction "+ logicFunction);
+          console.log("TWEET TEXT: "+tweet.text);
 
-        T.post('statuses/update', params, function (err, data, response) {
-          console.log(data)
-        })
-      }
-    })
-  })
+          twitter_functions(tweet,logicFunction,function(result){
+            console.log("FUNCTION RESULT: "+JSON.stringify(result));
+            
+            checkGists(badgeHashtag+'-'+screename+'-'+criteriaHashTag+'.json', function(match){
+              if (match == true) {
+                // user already completed
+                console.log(true);
+              }
+            });
+          });
+
+
+          
+            
+        }
+      ], function (err, result) {
+          //console.log("SEND REPLY");
+          callback(null);
+        }); 
+      });
+    }
+  });
+
+  //callback(null);
 }
