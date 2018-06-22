@@ -30,14 +30,14 @@ module.exports = function(badgeName, completeCriteria) {
   const svgHtml = fs.readFileSync(path.join(__dirname, "test.svg"), { encoding: "utf-8" });
   const svg = draw.svg(svgHtml).width(badgeWidth).height(badgeHeight);
 
-  // randomize our colors
+  // do math stuff
   const indivWidth = badgeWidth / colors.length;
-  let x = 0;
 
   // for each color, paint it on the svg
   colors.forEach((color, index) => {
-    x = indivWidth * index;
-    svg.rect(indivWidth, badgeHeight).attr({ x, opacity: 0.4 }).fill(color);
+    svg.rect(indivWidth, badgeHeight)
+      .attr({ x: indivWidth * index, opacity: 0.4 })
+      .fill(color);
   });
 
   // this will write a file, then return png buffered data
@@ -69,7 +69,7 @@ function fisherYatesShuffle(array) {
 
 /* uncomment the line below to see how the localConvert works */
 async function localConvert(input, outputFilePath) {
-  let options = { width: 472, height: 392 };
+  let options = { width: badgeWidth, height: badgeHeight };
   if (outputFilePath) {
     // options = { ...options, filename: outputFilePath };
   }
