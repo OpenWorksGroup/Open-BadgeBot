@@ -1,6 +1,5 @@
+/* refer to test.js */
 
-// I am making this into its own function so we can apply this to any new
-// badges that come from newly added badge images.
 const window   = require('svgdom');
 const SVG      = require('svg.js')(window);
 const svgpath = require('svgpath');
@@ -14,7 +13,7 @@ const path = require('path');
 const badgeHeight = 392;
 const badgeWidth = 472;
 
-/* example call */
+/* example call from inside file */
 // completeBadge("testbadge", ["photo", "resource"]);
 
 /* Read the SVG, transform the SVG, then create a PNG and return in base64 encoding. */
