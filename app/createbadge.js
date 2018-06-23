@@ -10,8 +10,8 @@ const fs = require('fs');
 const path = require('path');
 
 // needed constants
-const badgeHeight = 392;
-const badgeWidth = 472;
+const badgeHeight = 400;
+const badgeWidth = 400;
 
 /* example call from inside file */
 // completeBadge("testbadge", ["photo", "resource"]);
@@ -27,7 +27,7 @@ module.exports = function(badgeName, completeCriteria) {
 
   // setup
   const draw = SVG(document.documentElement);
-  const svgHtml = fs.readFileSync(path.join(__dirname, "test.svg"), { encoding: "utf-8" });
+  const svgHtml = fs.readFileSync(path.join(__dirname, "sociallearningbadge.svg"), { encoding: "utf-8" });
   const svg = draw.svg(svgHtml).width(badgeWidth).height(badgeHeight);
 
   // do math stuff
