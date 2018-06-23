@@ -1,0 +1,51 @@
+<% include _shared/header %> 
+<div class="container container-margin-top-40">
+    <!-- product detail -->
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="mt-3"><%= badge.badge_name %></h1>
+                <div class="row container-margin-top-40 container-margin-bottom-40">
+                    <div class="col-lg-5 product-detail-img">
+                        <div class="my-1">
+                            <img class="badge-image" src="data:image/png;base64, <%= badge.image %>" alt="<%= badge.badge_name %> image" />
+                        </div>
+                    </div>
+                    <div class="col-lg-7 product-detail">
+                        <h3>
+                            <%= description %>
+                        </h3>
+                        <h4><%= badge.hashtag_id %></h4>
+
+                        <p class="lead">At <a href="http://participate.com" target="_blank">Participate.com</a>, educators use Twitter to have synchronous and asynchronous chats organized around specific hashtags to work together toward a common goal and to share ideas resources, practices and tools. <a href="http://learn.participate.com/communities-of-practice" target=_blank">Read the white paper</a></p>
+
+                        <p class="lead">Participate.com and the Badge Bot invite you to prototype the first Open Badges Twitter issuing bot by participating in Twitter chats and finding your tribe, and your community.</p>    
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h4>Instructions</h4>
+                        <div class="lead">
+                            <p>Send a tweet from your account to <a href="//twitter.com/@BadgeBotio" target="_blank" title="Badge Bot Twitter">@badgebotio</a> using the hashtag #<%= badge.hashtag_id %> and the #[thehashtag] as indicated below relative to that criteria. Please only submit one criteria at a time. The BadgeBot will review your tweet and respond.</p>
+    
+                            <p>You can complete one or all of the options below in any order. Your first successful submission will result in an issued badge sent to your Twitter account. Each successive submission will accumulate evidence in the badge and the badge image itself will evolve.</p> 
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <% badge.criteria.forEach(function(criteria){ %>
+                            <div class="container-margin-bottom-40">
+                                <hr class="green">
+                                <h5><%= criteria.description %></h5>
+                                <p><strong>Hashtag:</strong> #<%= criteria.hashtag_id %><br/>
+                                <strong>Evidence:</strong> <%= criteria.evidence_required %><br/>
+                                <strong>Example Tweet:</strong> <%= criteria.example_tweet %></p>
+                            </div>
+
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<% include _shared/footer %> 

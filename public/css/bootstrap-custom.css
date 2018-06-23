@@ -11,7 +11,7 @@
  * Copyright 2011-2018 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
-@import url("https://fonts.googleapis.com/css?family=Roboto:400,500,700");
+/*@import url("https://fonts.googleapis.com/css?family=Roboto:400,500,700");*/
 :root {
   --blue: #325D88;
   --indigo: #6610f2;
@@ -57,20 +57,26 @@ html {
   -ms-text-size-adjust: 100%;
   -ms-overflow-style: scrollbar;
   -webkit-tap-highlight-color: transparent;
+  /*-webkit-tap-highlight-color: rgba(21, 21, 21, 0); }*/
 }
 
 @-ms-viewport {
   width: device-width;
 }
 
-article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
+/*sandstone: article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
   display: block;
+}*/
+
+article, aside, dialog, figcaption, figure, footer, header, hgroup, main, nav, section {
+  display: block; 
 }
 
 body {
   margin: 0;
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 0.875rem;
+  /* sandstone font-size: 0.875rem;*/
+  font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
   color: #3E3F3A;
@@ -91,7 +97,8 @@ hr {
 
 h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
-  margin-bottom: 0.5rem;
+  /*sandstone margin-bottom: 0.5rem;*/
+  margin-bottom: 0.55rem;
 }
 
 p {
@@ -371,39 +378,48 @@ template {
 
 h1, h2, h3, h4, h5, h6,
 .h1, .h2, .h3, .h4, .h5, .h6 {
-  margin-bottom: 0.5rem;
+  /*sandstone margin-bottom: 0.5rem;*/
+  margin-bottom: 0.55rem;
   font-family: inherit;
-  font-weight: 400;
+  /* sandstone font-weight: 400; */
+  font-weight: 600;
   line-height: 1.2;
   color: inherit;
 }
 
 h1, .h1 {
-  font-size: 2.1875rem;
+  /* sandstonefont-size: 2.1875rem;*/
+  font-size: 2.5rem;
 }
 
 h2, .h2 {
-  font-size: 1.75rem;
+  /* sandstonefont-size: 1.75rem;*/
+  font-size: 2rem;
 }
 
 h3, .h3 {
-  font-size: 1.53125rem;
+  /* sandstonefont-size: 1.53125rem;*/
+  font-size: 1.75rem;
 }
 
 h4, .h4 {
-  font-size: 1.3125rem;
+  /* sandstonefont-size: 1.3125rem;*/
+  font-size: 1.5rem;
 }
 
 h5, .h5 {
-  font-size: 1.09375rem;
+  /* sandstonefont-size: 1.09375rem;*/
+  font-size: 1.25rem;
 }
 
 h6, .h6 {
-  font-size: 0.875rem;
+  /* sandstonefont-size: 0.875rem;*/
+  font-size: 1rem;
 }
 
 .lead {
-  font-size: 1.09375rem;
+  /* sandstonefont-size: 1.09375rem;*/
+  font-size: 1.25rem;
   font-weight: 300;
 }
 
@@ -432,8 +448,8 @@ h6, .h6 {
 }
 
 hr {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 1.1rem;
+  margin-bottom: 1.1rem;
   border: 0;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
@@ -474,8 +490,8 @@ mark,
 }
 
 .blockquote {
-  margin-bottom: 1rem;
-  font-size: 1.09375rem;
+  margin-bottom: 1.1rem;
+  font-size: 1.25rem;
 }
 
 .blockquote-footer {
@@ -507,7 +523,7 @@ mark,
 }
 
 .figure-img {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.55rem;
   line-height: 1;
 }
 
@@ -4209,6 +4225,7 @@ input[type="button"].btn-block {
   font-size: 1.09375rem;
   line-height: inherit;
   white-space: nowrap;
+  background-image: url("../images/BB_logo.png");
 }
 
 .navbar-brand:hover, .navbar-brand:focus {

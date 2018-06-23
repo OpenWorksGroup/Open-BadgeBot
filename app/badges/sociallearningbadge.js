@@ -3,7 +3,7 @@ module.exports = {
     type: "accretion",
     hashtag_id: "#sociallearningbadge",
     gist_id: "4e8159ecf27faf3539607bc4ab97b9a1",
-    description: "Participate &amp; Badge Bot Social Learning Badge", 
+    description: "Participate & Badge Bot Social Learning Badge", 
     //expires_date: //maybe use this to turn it off?
     criteria_description: "",
     criteria:[

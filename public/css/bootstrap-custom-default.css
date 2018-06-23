@@ -43,6 +43,8 @@
   box-sizing: border-box; }
 
 html {
+  position: relative;
+  min-height: 100%;
   font-family: sans-serif;
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
@@ -58,8 +60,9 @@ article, aside, dialog, figcaption, figure, footer, header, hgroup, main, nav, s
 
 body {
   margin: 0;
+  margin-bottom: 60px !important;
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 400;
   line-height: 1.5;
   color: #212529;
@@ -84,8 +87,8 @@ p {
 
 abbr[title],
 abbr[data-original-title] {
-  text-decoration: underline;
-  text-decoration: underline dotted;
+  text-decoration: underline;text-decoration: underline dotted;
+  
   cursor: help;
   border-bottom: 0; }
 
@@ -296,6 +299,16 @@ summary {
 template {
   display: none; }
 
+.product-detail-img img {
+  /*border: 1px solid #000;*/
+  zoom: 90%;
+}
+
+.product-detail {
+  padding-left: 20px;
+ /* border: 1px solid #000;*/
+}
+
 [hidden] {
   display: none !important; }
 
@@ -305,7 +318,7 @@ h1, h2, h3, h4, h5, h6,
   font-family: "Roboto", sans-serif;
   font-weight: 600;
   line-height: 1.2;
-  color: inherit; }
+  color: #3E3F3A; }
 
 h1, .h1 {
   font-size: 2.5rem; }
@@ -471,6 +484,14 @@ pre {
   @media (min-width: 1200px) {
     .container {
       max-width: 1140px; } }
+
+.container-margin-top-40 {
+  margin-top: 40px;
+}
+
+.container-margin-bottom-40 {
+  margin-bottom: 40px;
+}
 
 .container-fluid {
   width: 100%;
@@ -6390,6 +6411,10 @@ hr.accent {
   border-color: #fcf113;
   opacity: 1; }
 
+hr.green {
+  border: 2px dashed #93C54B;
+  opacity: 1; }
+
 .bg-alt {
   background-color: #e2e5e7; }
 
@@ -6456,7 +6481,11 @@ header .header-content {
     padding: 65px 0; } }
 
 footer {
-  padding: 65px 30px;
+  /*position: absolute;
+  bottom: 0;*/
+  width: 100%;
+  /*padding: 65px 30px;*/
+  padding-bottom: 30px;
   background-color: #d9534f;
   color: #fff; }
   footer h4,
@@ -6492,7 +6521,7 @@ footer {
   -moz-transition: width .4s;
   -o-transition: width .4s;
   transition: width .4s;
-  min-height: 60px;
+  min-height: 82px;
   padding-left: 1.1rem;
   font-family: 'Montserrat',Arial,sans-serif; }
 
@@ -6670,6 +6699,10 @@ footer {
   transition: font-size .30s ease; }
 
 @media (max-width: 768px) {
+  footer {
+    position: relative;
+    bottom: 0;
+  }
   .sidebar {
     min-width: 45px;
     max-width: 45px;
