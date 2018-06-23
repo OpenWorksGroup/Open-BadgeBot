@@ -1,7 +1,7 @@
 module.exports = {
     badge_name: "Social Learning",  //temp name
     type: "accretion",
-    hashtag_id: "#sociallearningbadge",
+    hashtag_id: "sociallearningbadge",
     gist_id: "4e8159ecf27faf3539607bc4ab97b9a1",
     description: "Participate & Badge Bot Social Learning Badge", 
     //expires_date: //maybe use this to turn it off?
