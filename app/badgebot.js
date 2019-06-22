@@ -13,7 +13,7 @@ const request = require("request");
 const createSVGBadgePNG = require("./createbadge.js");
 
 const bdb = require("berkeleydb");
-const db = new bdb.Db(); // create a new Db object
+//const db = new bdb.Db(); // create a new Db object
 
 const twitConfig = require('../config/twit');
 const T = new Twit(twitConfig); 
@@ -30,7 +30,7 @@ var bbGists = [];
 
 
 // STARTS HERE. Get gists, badges & tweets
-module.exports = function(badgeName, completeCriteria) {
+//module.exports = function(badgeName, completeCriteria) {
 async.waterfall([
   getGists,
   getBadges,
@@ -71,42 +71,68 @@ var lastTweetId is stored in Berkely DB.
 Twitter has a max of 200 per request.
 **/
 function getTweets(bbGists, badges, callback) {
-    db.open("badgebot.db");
-    var lastTweetId = db.get("lastTweetId").toString();
+    //db.open("badgebot.db");
+    //var lastTweetId = db.get("lastTweetId").toString();
     //var lastTweetId = "1141766497540464640";
     //console.log("lastTweetId "+lastTweetId);
+    var lastTweetIdGistId = "ce72ef0fc1d15ae2dded53fd3ca7c997";
+    request('https://gist.githubusercontent.com/badgebotio/'+lastTweetIdGistId+'/raw',
+        function(err,response,body) {
+            var lastTweetId  = JSON.parse(body);
+             console.log("gistID "+JSON.stringify(lastTweetId));
+             //exit;
 
-    var options = {count: 200};
-    if (lastTweetId) { options.since_id = lastTweetId; }
+            var options = {count: 200};
+            if (lastTweetId) { options.since_id = lastTweetId; }
 
-    console.log("options "+ JSON.stringify(options));
+            //console.log("options "+ JSON.stringify(options));
+            var lastTweetId_str ="";
 
-    T.get('/statuses/mentions_timeline', options, function(err, tweets, response) {
-        if (tweets.length > 0) {
-            var i = 0;
-            async.each(tweets, function(tweet, callback) {
-                /**most recent is first result. Store this id so 
-                we can retrieve only most recent using since_id**/
-                if (i == 0) { 
-                    db.put("lastTweetId", tweet.id_str);
-                }
-              //  console.log("TWEET ID: "+tweet.id_str);
-              //  console.log("CREATED AT: "+tweet.created_at);
-                i++;
-                callback();
-            },
-            function (err) {
-               // console.log("err "+err);
+            T.get('/statuses/mentions_timeline', options, function(err, tweets, response) {
+                if (tweets.length > 0) {
+                    var i = 0;
+                    
+                    async.each(tweets, function(tweet, callback) {
+                        /**most recent is first result. Store this id so 
+                        we can retrieve only most recent using since_id**/
+                        
+                        if (i == 0) { 
+                            lastTweetId_str = tweet.id_str;
+                           // db.put("lastTweetId", tweet.id_str);
+                        }
+                        i++;
+
+                    //  console.log("TWEET ID: "+tweet.id_str);
+                    //  console.log("CREATED AT: "+tweet.created_at);
+                        
+
+                    
+                    callback();
+                },
+                    function () {
+                    // console.log("err "+err);
+                    //db.close();
+                    console.log("LATEST TWTTY "+lastTweetId_str);
+                    var lastTweetId_strf = "123";
+                    gists.edit({
+                        "id": lastTweetIdGistId,
+                        "files": {
+                            "last-twitter-id.txt": {
+                                "content": lastTweetId_str
+                            }
+                        }
+                    }, function(err, rest) {
+                        callback(null, bbGists,badges,tweets);
+                    });
+                    
+                });
+            }
+            else {
+                console.log("No Tweets");
                 db.close();
-                //console.log("LATEST TWEETS "+JSON.stringify(tweets));
-                callback(null, bbGists,badges,tweets);
-            });
-        }
-        else {
-            console.log("No Tweets");
-            db.close();
-            callback(null, bbGists, badges, tweets);
-        }
+                callback(null, bbGists, badges, tweets);
+            }
+        });
     });
 }
 
@@ -136,7 +162,7 @@ function processTweets(bbGists, badges, tweets, callback) {
             getBadgeFromTweet(tweet, badges, function(badge) {
 
                 if (badge) {
-                    console.log("badge "+JSON.stringify(badge));
+                    //console.log("badge "+JSON.stringify(badge));
                     async.series([
                         function(callback) {
                            // get earners & filter out @badgebotio
@@ -385,4 +411,4 @@ function getBadgeFromTweet(tweet, badges, callback) {
             callback(result);
     });
 }
-}
+//}
