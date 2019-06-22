@@ -129,7 +129,7 @@ function getTweets(bbGists, badges, callback) {
             }
             else {
                 console.log("No Tweets");
-                db.close();
+                //db.close();
                 callback(null, bbGists, badges, tweets);
             }
         });
