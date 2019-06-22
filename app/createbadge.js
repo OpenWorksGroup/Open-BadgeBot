@@ -20,6 +20,7 @@ const badgeWidth = 400;
 module.exports = function(badgeName, completeCriteria) {
   // this makes me nervous
   const badge = require(path.join(__dirname, `badges/${badgeName}.js`));
+  console.log("Badge create "+badge);
   const criteria = badge.criteria.filter(c => {
     return completeCriteria.indexOf(c.hashtag_id) > -1;
   });
@@ -27,7 +28,7 @@ module.exports = function(badgeName, completeCriteria) {
 
   // setup
   const draw = SVG(document.documentElement);
-  const svgHtml = fs.readFileSync(path.join(__dirname, "sociallearningbadge.svg"), { encoding: "utf-8" });
+  const svgHtml = fs.readFileSync(path.join(__dirname, badge.svg_file), { encoding: "utf-8" });
   const svg = draw.svg(svgHtml).width(badgeWidth).height(badgeHeight);
 
   // do math stuff
@@ -74,7 +75,7 @@ async function localConvert(input, outputFilePath) {
     // options = { ...options, filename: outputFilePath };
   }
 
-  console.log("options", options);
+  //console.log("options", options);
   return await convert(input, options).then((data) => {
     console.log("Successfully converted");
     return data;
