@@ -12,7 +12,7 @@ const path = require('path');
 const request = require("request");
 const createSVGBadgePNG = require("./createbadge.js");
 
-const bdb = require("berkeleydb");
+//const bdb = require("berkeleydb");
 //const db = new bdb.Db(); // create a new Db object
 
 const twitConfig = require('../config/twit');
